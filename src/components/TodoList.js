@@ -4,13 +4,13 @@ import React from 'react';
 import Todo from './Todo';
 
 function TodoList(props) {
-    const { todolist } = props;
+    const { todolist, markComplete } = props;
     console.log(todolist);
     return (
         <div>
             {
             todolist.map(item => (
-                <Todo key={item.id} todo={item.task} />
+                <Todo key={item.id} todo={item} markComplete={markComplete}/>
             )) 
             }
         </div>

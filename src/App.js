@@ -35,20 +35,27 @@ class App extends React.Component {
         completed: false
       }]);
   };
-  
+
   handleClear = (e) => {
     e.preventDefault();
-    this.setState(this.state.todos = []);
+    this.setState(this.state.todos = this.state.todos.filter(todo => todo.completed == false));
   }
-
+  markComplete = (id) => {
+    this.setState(this.state.todos.map(todo => {
+      if (todo.id === id){
+        todo.completed = true
+      }
+    }));
+  }
+  
   render() {
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
-        <TodoList todolist={this.state.todos}/>
+        <TodoList todolist={this.state.todos} markComplete={this.markComplete}/>
         {console.log(this.state.todos)}
         <TodoForm updateState={this.updateState}/>
-        <button onClick={this.handleClear}>Clear All</button>
+        <button onClick={this.handleClear}>Clear Completed</button>
       </div>
     );
   }
