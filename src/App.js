@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoList from './components/TodoList';
 import TodoForm from './components/TodoForm';
+import './components/Todo.css';
 
 const todos = [
     {
@@ -50,12 +51,14 @@ class App extends React.Component {
   
   render() {
     return (
-      <div>
-        <h2>Welcome to your Todo App!</h2>
+      <div className='app-wrapper'>
+        <h1>My Todos</h1>
         <TodoList todolist={this.state.todos} markComplete={this.markComplete}/>
         {console.log(this.state.todos)}
-        <TodoForm updateState={this.updateState}/>
-        <button onClick={this.handleClear}>Clear Completed</button>
+        <div className='form-button-wrapper'>
+          <TodoForm updateState={this.updateState}/>
+          <button onClick={this.handleClear}>Clear Completed</button>
+        </div>
       </div>
     );
   }

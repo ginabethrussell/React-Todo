@@ -7,10 +7,10 @@ function TodoList(props) {
     const { todolist, markComplete } = props;
     console.log(todolist);
     return (
-        <div>
+        <div className='list-wrapper'>
             {
-            todolist.map(item => (
-                <Todo key={item.id} todo={item} markComplete={markComplete}/>
+            todolist.map((item, index) => (
+                <Todo key={item.id} number={index + 1} todo={item} markComplete={markComplete}/>
             )) 
             }
         </div>
