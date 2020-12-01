@@ -26,6 +26,18 @@ class App extends React.Component {
       todos: todos
     };
   }
+  
+  componentDidMount = () => {
+    let storedTodos = window.localStorage.getItem('todos');
+    storedTodos = JSON.parse(storedTodos);
+    if (storedTodos !== null){
+      this.setState({todos: storedTodos});
+    }
+  }
+
+  componentDidUpdate = () => {
+    window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
+  }
 
   updateState = (todo) => {
     console.log(this.state.todos);
