@@ -5,7 +5,7 @@ import Todo from './Todo';
 
 function TodoList(props) {
     const { todolist, markComplete } = props;
-    console.log(todolist);
+   
     return (
         <div className='list-wrapper'>
             {

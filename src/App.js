@@ -42,7 +42,6 @@ class App extends React.Component {
     }
   }
 
- 
   componentDidUpdate = () => {
     window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
   }
@@ -67,12 +66,14 @@ class App extends React.Component {
     this.setState({ filteredTodos: [...this.state.todos, todo]})
   }
 
+  //non ideal, duplicated code
   handleClear = (e) => {
     e.preventDefault();
     this.setState(this.state.todos = this.state.todos.filter(todo => todo.completed == false));
     this.setState(this.state.filteredTodos = this.state.todos.filter(todo => todo.completed == false));
   }
 
+  //non ideal, duplicated code
   markComplete = (id) => {
     this.setState(this.state.filteredTodos.map(todo => {
       if (todo.id === id){
@@ -87,7 +88,6 @@ class App extends React.Component {
   }
 
   filterSearch = (searchTerm) => {
-    console.log('searchTerm', searchTerm);
     if (searchTerm !== ''){
       this.setState({ filteredTodos: this.state.todos.filter(todo => todo.task.toLowerCase().includes(searchTerm.toLowerCase()))})
     }else {
@@ -100,8 +100,6 @@ class App extends React.Component {
       <div className='app-wrapper'>
         <h1>My Todos</h1>
         <SearchField filterSearch={this.filterSearch} />
-        {console.log('filteredlist', this.state.filteredTodos)}
-          {console.log('todos', this.state.todos)}
         <TodoList todolist={this.state.filteredTodos} markComplete={this.markComplete}/>
         <div className='form-button-wrapper'>
           <TodoForm updateState={this.updateState}/>
