@@ -19,7 +19,6 @@ body {
     justify-content: space-between;
     align-items: flex-start;
 }
-
 h1 {
     width: 100%;
     background-color: crimson;
@@ -59,4 +58,19 @@ input[type='text'] {
 }
 button {
     font-size: 1.6rem;
+}
+
+.search-field {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 1.8rem 0;
+}
+.search-field label {
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.search-field input {
+    width: 65%;
 }

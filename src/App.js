@@ -1,6 +1,8 @@
 import React from 'react';
 import TodoList from './components/TodoList';
 import TodoForm from './components/TodoForm';
+import SearchField from './components/SearchField';
+
 import './components/Todo.css';
 
 const todos = [
@@ -23,50 +25,84 @@ class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      todos: todos
+      todos: todos,
+      filteredTodos: todos
     };
   }
-  
+
   componentDidMount = () => {
     let storedTodos = window.localStorage.getItem('todos');
     storedTodos = JSON.parse(storedTodos);
     if (storedTodos !== null){
-      this.setState({todos: storedTodos});
+      this.setState({
+        todos: storedTodos
+      });
+    }else {
+      window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
     }
   }
 
+ 
   componentDidUpdate = () => {
     window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
   }
 
   updateState = (todo) => {
-    console.log(this.state.todos);
-    this.setState({ todos:  [...this.state.todos,
-      {
+    if (todo !== ''){
+      const newTodo = {
         task: todo,
         id: Date.now(),
         completed: false
-      }]});
+      };
+      this.setState({ todos:  [...this.state.todos,
+        newTodo ], 
+     });
+      this.updateFilteredList(newTodo);
+    }
   };
+
+  // This is behind by 1 because it is being called before the state is updated at the end of the updateState function
+  // non optimum fix - add the latest todo manually by passing it from the updateState function
+  updateFilteredList = (todo) => {
+    this.setState({ filteredTodos: [...this.state.todos, todo]})
+  }
 
   handleClear = (e) => {
     e.preventDefault();
     this.setState(this.state.todos = this.state.todos.filter(todo => todo.completed == false));
+    this.setState(this.state.filteredTodos = this.state.todos.filter(todo => todo.completed == false));
   }
+
   markComplete = (id) => {
+    this.setState(this.state.filteredTodos.map(todo => {
+      if (todo.id === id){
+        todo.completed = true
+      }
+    }));
     this.setState(this.state.todos.map(todo => {
       if (todo.id === id){
         todo.completed = true
       }
     }));
   }
+
+  filterSearch = (searchTerm) => {
+    console.log('searchTerm', searchTerm);
+    if (searchTerm !== ''){
+      this.setState({ filteredTodos: this.state.todos.filter(todo => todo.task.toLowerCase().includes(searchTerm.toLowerCase()))})
+    }else {
+      this.setState({ filteredTodos: JSON.parse(window.localStorage.getItem('todos'))});
+    }  
+  }
   
   render() {
     return (
       <div className='app-wrapper'>
         <h1>My Todos</h1>
-        <TodoList todolist={this.state.todos} markComplete={this.markComplete}/>
-        {console.log(this.state.todos)}
+        <SearchField filterSearch={this.filterSearch} />
+        {console.log('filteredlist', this.state.filteredTodos)}
+          {console.log('todos', this.state.todos)}
+        <TodoList todolist={this.state.filteredTodos} markComplete={this.markComplete}/>
         <div className='form-button-wrapper'>
           <TodoForm updateState={this.updateState}/>
           <button onClick={this.handleClear}>Clear Completed</button>
