@@ -6,7 +6,8 @@ function Todo (props) {
         markComplete(id);
     }
     return (
-    <div onClick={() => handleComplete(todo.id)}>{todo.task}</div>
+    <div style={!!todo.completed ? {textDecoration: 'line-through'}: null}
+    onClick={() => handleComplete(todo.id)}>{todo.task}</div>
     )
 }
 
