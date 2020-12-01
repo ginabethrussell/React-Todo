@@ -29,12 +29,12 @@ class App extends React.Component {
 
   updateState = (todo) => {
     console.log(this.state.todos);
-    this.setState(this.state.todos = [...this.state.todos,
+    this.setState({ todos:  [...this.state.todos,
       {
         task: todo,
         id: Date.now(),
         completed: false
-      }]);
+      }]});
   };
 
   handleClear = (e) => {
