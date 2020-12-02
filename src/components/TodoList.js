@@ -4,13 +4,13 @@ import React from 'react';
 import Todo from './Todo';
 
 function TodoList(props) {
-    const { todolist, markComplete } = props;
+    const { todolist, toggleComplete } = props;
    
     return (
         <div className='list-wrapper'>
             {
             todolist.map((item, index) => (
-                <Todo key={item.id} number={index + 1} todo={item} markComplete={markComplete}/>
+                <Todo key={item.id} number={index + 1} todo={item} toggleComplete={toggleComplete}/>
             )) 
             }
         </div>

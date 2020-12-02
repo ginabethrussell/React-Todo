@@ -19,14 +19,11 @@ const todos = [
   ];
 
 class App extends React.Component {
-  // you will need a place to store your state in this component.
-  // design `App` to be the parent component of your application.
-  // this component is going to take care of state, and any change handlers you need to work with your state
   constructor(){
     super();
     this.state = {
-      todos: todos,
-      filteredTodos: todos
+      todos: [],
+      filteredTodos: []
     };
   }
 
@@ -35,7 +32,9 @@ class App extends React.Component {
     storedTodos = JSON.parse(storedTodos);
     if (storedTodos !== null){
       this.setState({
-        todos: storedTodos
+        ...this.state,
+          todos: storedTodos,
+          filteredTodos: storedTodos
       });
     }else {
       window.localStorage.setItem('todos', JSON.stringify(this.state.todos));
@@ -53,45 +52,55 @@ class App extends React.Component {
         id: Date.now(),
         completed: false
       };
-      this.setState({ todos:  [...this.state.todos,
+      this.setState({ 
+        ...this.state,
+        todos: [...this.state.filteredTodos,
+          newTodo ],
+        filteredTodos:  [...this.state.filteredTodos,
         newTodo ], 
      });
-      this.updateFilteredList(newTodo);
     }
   };
 
-  // This is behind by 1 because it is being called before the state is updated at the end of the updateState function
-  // non optimum fix - add the latest todo manually by passing it from the updateState function
-  updateFilteredList = (todo) => {
-    this.setState({ filteredTodos: [...this.state.todos, todo]})
-  }
-
+  
   //non ideal, duplicated code
   handleClear = (e) => {
     e.preventDefault();
-    this.setState(this.state.todos = this.state.todos.filter(todo => todo.completed == false));
-    this.setState(this.state.filteredTodos = this.state.todos.filter(todo => todo.completed == false));
+    this.setState({
+      ...this.state,
+      filteredTodos: this.state.filteredTodos.filter(todo => todo.completed == false),
+      todos: this.state.todos.filter(todo => todo.completed == false)
+      
+    });
   }
-
+ 
   //non ideal, duplicated code
-  markComplete = (id) => {
-    this.setState(this.state.filteredTodos.map(todo => {
+  toggleComplete = (id) => {
+    console.log(id);
+    this.setState({
+      ...this.state,
+      filteredTodos: this.state.filteredTodos.map(todo => {
       if (todo.id === id){
-        todo.completed = true
-      }
-    }));
-    this.setState(this.state.todos.map(todo => {
-      if (todo.id === id){
-        todo.completed = true
-      }
-    }));
+        console.log(todo)
+        return {
+          ...todo,
+          completed:  !todo.completed
+        }
+      }else{
+        return todo;
+    }})
+  });
   }
 
   filterSearch = (searchTerm) => {
     if (searchTerm !== ''){
-      this.setState({ filteredTodos: this.state.todos.filter(todo => todo.task.toLowerCase().includes(searchTerm.toLowerCase()))})
+      this.setState({ 
+        ...this.state,
+        filteredTodos: this.state.todos.filter(todo => todo.task.toLowerCase().includes(searchTerm.toLowerCase()))})
     }else {
-      this.setState({ filteredTodos: JSON.parse(window.localStorage.getItem('todos'))});
+      this.setState({
+        ...this.state,
+        filteredTodos: JSON.parse(window.localStorage.getItem('todos'))});
     }  
   }
   
@@ -100,7 +109,7 @@ class App extends React.Component {
       <div className='app-wrapper'>
         <h1>My Todos</h1>
         <SearchField filterSearch={this.filterSearch} />
-        <TodoList todolist={this.state.filteredTodos} markComplete={this.markComplete}/>
+        <TodoList todolist={this.state.filteredTodos} toggleComplete={this.toggleComplete}/>
         <div className='form-button-wrapper'>
           <TodoForm updateState={this.updateState}/>
           <button onClick={this.handleClear}>Clear Completed</button>
